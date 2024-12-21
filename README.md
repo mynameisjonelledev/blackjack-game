@@ -24,3 +24,8 @@ The game simulates a classic card game experience where you can play against the
 
 ## Acknowledgments
 This project is inspired by **Scrimba's Blackjack exercise project** and was created as part of my practice in frontend development. It has been a great way to enhance my understanding of JavaScript game logic, conditional statements, and DOM manipulation.
+
+## Added Features
+- Add player name entry and credit adjustment system
+- Require player to enter their name before starting the game.
+- Implement credit deduction on loss and credit increase on win.
