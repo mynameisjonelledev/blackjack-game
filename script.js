@@ -14,14 +14,43 @@ let messageEl = document.querySelector('#message-el');
 let sumEl = document.querySelector('#sum-el');
 let cardsEl = document.querySelector('#cards-el');
 
+let isNameAdded = false;
+
+/*
 let player = {
   name: 'Jonelle',
   chips: 200
-}
+} */
 
 let playerEl = document.querySelector('#player-el');
 
-playerEl.textContent = player.name + ': $' + player.chips;
+// playerEl.textContent = player.name + ': $' + player.chips; 
+
+const playerName = document.querySelector('.input-el');
+let creditsEl = document.querySelector('#credits-el');
+let isDefeated = false;
+let playerCredits = 200;
+
+function nameAdded(event) {
+  if (event.key === 'Enter') {
+    playerEl.textContent = 'Player name:' + ' ' + playerName.value;
+    document.querySelector('.input-label').textContent = '';
+    playerName.value = '';
+    playerName.remove();
+    document.querySelector('.p-el').remove(); 
+
+    creditsEl.textContent = 'Credits:' + ' ' + playerCredits;
+
+    isNameAdded = true;
+    isAlive = true;
+  }
+
+}
+
+
+document.querySelector('.input-el').addEventListener('keydown', (event) => {
+  nameAdded(event);
+});
 
 function getRandomCard() {
   const randomNumber = Math.floor(Math.random() * 13) + 1;
@@ -37,15 +66,18 @@ function getRandomCard() {
 
 
 function startGame() {
-  isAlive = true;
-  
-  let firstCard = getRandomCard();
-  let secondCard = getRandomCard();
+  if (isNameAdded && playerCredits >= 21) {
+    isAlive = true;
+    let firstCard = getRandomCard();
+    let secondCard = getRandomCard();
   
   cards = [firstCard, secondCard];
   sum = firstCard + secondCard;
   
   renderGame();
+  } else if (playerCredits <= 21) {
+    messageEl.innerHTML = `<p class="inside-message">You don't have enough credits to play. <br>Please reload your browser!</p>`;
+  }
 }
 
 function renderGame() {
@@ -64,9 +96,11 @@ function renderGame() {
 } else {
   message = "You're out of the game!";
   isAlive = false;
+  isDefeated = true;
 }
 
 messageEl.textContent = message;
+gameResult();
 }
 
 
@@ -76,7 +110,7 @@ document.querySelector('.start-btn').addEventListener('click', () => {
 
 
 function newCard() {
-  if (isAlive === true && hasBlackJack === false) {
+  if (isNameAdded === true && hasBlackJack === false && isAlive === true) {
   let card = getRandomCard();
   sum += card;
   cards.push(card);
@@ -88,19 +122,16 @@ document.querySelector('.new-card').addEventListener('click', () => {
   newCard();
 });
 
+function gameResult() {
+  if (isDefeated) {
+    playerCredits -= 21;
+    creditsEl.textContent = 'Credits:' + ' ' + playerCredits;
+    isDefeated = true;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  } else if (hasBlackJack) {
+    playerCredits += 21;
+    creditsEl.textContent = 'Credits:' + ' ' + playerCredits;
+  }
+ 
+}
 
